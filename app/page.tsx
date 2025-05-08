@@ -1,6 +1,37 @@
-import Image from "next/image";
+'use client'
+
+import { useEffect } from 'react'
+import Image from 'next/image'
 
 export default function Home() {
+  useEffect(() => {
+    // Function to dynamically load a script
+    const loadScript = (src: string) => {
+      const script = document.createElement('script')
+      script.src = src
+      script.async = true
+      document.body.appendChild(script)
+
+      script.onload = () => {
+        console.log(`${src} loaded successfully`)
+      }
+
+      script.onerror = () => {
+        console.error(`Error loading script: ${src}`)
+      }
+    }
+
+    // Load the Botpress Webchat scripts
+    loadScript('https://cdn.botpress.cloud/webchat/v2.5/inject.js')
+    loadScript('https://files.bpcontent.cloud/2025/05/08/16/20250508160033-YOPHE39Z.js')
+
+    return () => {
+      // Cleanup scripts if needed
+      const scripts = document.querySelectorAll('script[src="https://cdn.botpress.cloud/webchat/v2.5/inject.js"], script[src="https://files.bpcontent.cloud/2025/05/08/16/20250508160033-YOPHE39Z.js"]')
+      scripts.forEach(script => script.remove())
+    }
+  }, [])
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -99,5 +130,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  );
+  )
 }
